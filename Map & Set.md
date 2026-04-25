@@ -65,6 +65,9 @@ myMap                     // Map(1) {'FirstName' => 'Shweta'}
 ---
 
 ### 1.6 Iterators – `.keys()`, `.values()`, `.entries()`
+### `.keys()` - returns an iterable for keys,
+### `.values()` - returns an iterable for values,
+### `.entries()` - returns an iterable for entries [key, value], it's used by default in for ..of .
 
 ```js
 myMap.keys()     // MapIterator {'FirstName', 'Email'}
