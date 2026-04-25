@@ -13,7 +13,7 @@ A `Map` is a collection of **key-value pairs** where keys can be of **any type**
 
 ```js
 // ❌ Wrong – keywords are case-sensitive, must be lowercase var/new and capitalized Map
-VAR MYmAP = NEW mAP();  // SyntaxError: Unexpected identifier 'MYmAP'
+VAR MYmAP = NEW mAP();  // SyntaxError: Unexpected identifier 'MYmAP' 
 
 // ✅ Correct
 var myMap = new Map();   // Map(0) {size: 0}

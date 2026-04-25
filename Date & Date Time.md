@@ -17,26 +17,7 @@ new Date("2014-03-21");  // Fri Mar 21 2014 05:30:00 GMT+0530
 ```
 
 ---
-
-## 2. Storing a Date in a Variable
-
-```js
-var todaysDate = new Date();
-// returns undefined (variable assignment doesn't return a value)
-```
-
----
-
-## 3. Getter Methods
-
-```js
-todaysDate.getDate();       // 20   → Day of the month (1–31)
-todaysDate.getDay();        // 1    → Day of the week (0=Sunday, 1=Monday … 6=Saturday)
-todaysDate.getFullYear();   // 2026 → 4-digit year
-todaysDate.getMonth();      // 0-indexed → 0=January … 11=December
-```
-
-### ⚠️ Common Mistake: `getMonths()` does not exist
+h
 
 ```js
 todaysDate.getMonths();  // ❌ TypeError: todaysDate.getMonths is not a function
