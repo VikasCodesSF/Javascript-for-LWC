@@ -48,7 +48,13 @@ user;  // also has Email now! → same object in memory
 
 > Both `admin` and `user` point to the **same object**. Changing one changes the other.
 
-### Shallow Copy (spread operator)
+---
+
+## 🔓 Breaking the Reference
+
+To avoid sharing the same memory reference, use one of these approaches:
+
+### 1. Spread Operator `{...obj}` — Shallow Copy
 
 ```js
 let admin1 = {...user};     // creates a NEW object with top-level properties copied
@@ -57,16 +63,63 @@ admin1.break = 'Yes';
 user;  // NOT affected — admin1 is a separate object
 ```
 
-> ⚠️ **Spread is shallow** — nested objects are still referenced, not deep-copied.
+### 2. `Object.assign({}, obj)` — Shallow Copy
+
+```js
+let admin2 = Object.assign({}, user);
+
+admin2.role = 'Editor';
+user;  // NOT affected — admin2 is a separate object
+```
+
+> ⚠️ **Both spread and Object.assign are shallow** — nested objects are still referenced, not deep-copied.
 
 ```js
 let user = {isAdmin: true, Name: 'Vikas', adminInfo: {country: 'IN', access: ['IP','Email']}};
-let adminUser = {...user};
 
-// adminUser.adminInfo still points to the SAME nested object as user.adminInfo
+let adminSpread = {...user};
+let adminAssign = Object.assign({}, user);
+
+// adminSpread.adminInfo and adminAssign.adminInfo still point to
+// the SAME nested object as user.adminInfo
+adminSpread.adminInfo.country = 'US';
+user.adminInfo.country;  // 'US' — nested object is still shared!
 ```
 
-> For deep copy, use `structuredClone(user)` or `JSON.parse(JSON.stringify(user))`.
+### 3. `JSON.parse(JSON.stringify(obj))` — Deep Copy
+
+```js
+let adminDeep = JSON.parse(JSON.stringify(user));
+
+adminDeep.adminInfo.country = 'UK';
+user.adminInfo.country;  // 'IN' — NOT affected ✅ (fully independent copy)
+```
+
+> ✅ **Deep copy** — nested objects are also cloned, not shared.  
+> ⚠️ **Limitation:** Does NOT work with `undefined`, functions, `Date` objects, `Map`, `Set`, or circular references.
+
+### 4. `structuredClone(obj)` — Deep Copy (Modern & Recommended)
+
+```js
+let adminClone = structuredClone(user);
+
+adminClone.adminInfo.country = 'JP';
+user.adminInfo.country;  // 'IN' — NOT affected ✅
+```
+
+> ✅ Handles more types than `JSON.parse/stringify` (e.g., `Date`, `Map`, `Set`).  
+> 📌 Recommended for deep copy in modern JavaScript.
+
+---
+
+## 📊 Ways to Break a Reference — Comparison
+
+| Method | Type | Nested Objects Safe? | Handles Special Types |
+|---|---|---|---|
+| `{...obj}` | Shallow Copy | ❌ Still shared | ✅ |
+| `Object.assign({}, obj)` | Shallow Copy | ❌ Still shared | ✅ |
+| `JSON.parse(JSON.stringify(obj))` | Deep Copy | ✅ Independent | ❌ No functions/Date/Map |
+| `structuredClone(obj)` | Deep Copy | ✅ Independent | ✅ Most types |
 
 ---
 
@@ -304,7 +357,9 @@ let crObj = Object.craete({name: 'Vikas'})   // ❌ typo: 'craete'
 | `typeof obj` | Returns `'object'` for objects |
 | `let b = a` | Reference — both point to same object |
 | `let b = {...a}` | Shallow copy — top-level props cloned |
-| `structuredClone(a)` | Deep copy — nested objects also cloned |
+| `Object.assign({}, a)` | Shallow copy — top-level props cloned |
+| `JSON.parse(JSON.stringify(a))` | Deep copy — nested objects also cloned (no functions/Date) |
+| `structuredClone(a)` | Deep copy — nested objects also cloned (handles more types) |
 | `new Map()` | Ordered key-value pairs (any key type) |
 | `Object.fromEntries(map)` | Converts Map → plain Object |
 | `Object.keys(obj)` | Array of keys |
@@ -332,7 +387,10 @@ let crObj = Object.craete({name: 'Vikas'})   // ❌ typo: 'craete'
 > 💡 **Key Takeaways**
 > - `typeof` is an **operator**, always lowercase — not a function.
 > - Objects assigned with `=` are **references**, not copies.
-> - Spread `{...obj}` creates a **shallow copy** — nested objects are still shared.
+> - To **break the reference**, use: `{...obj}`, `Object.assign({}, obj)`, `JSON.parse(JSON.stringify(obj))`, or `structuredClone(obj)`.
+> - Spread `{...obj}` and `Object.assign` create **shallow copies** — nested objects are still shared.
+> - `JSON.parse(JSON.stringify(obj))` creates a **deep copy** but loses functions, `Date`, `Map`, `Set`.
+> - `structuredClone(obj)` is the **modern recommended** deep copy — handles more types.
 > - `Object.seal()` allows updates; `Object.freeze()` blocks everything.
 > - Both `seal` and `freeze` are **shallow** — they don't protect nested objects.
 > - Use bracket notation `obj["key"]` for property names containing spaces.
