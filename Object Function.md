@@ -1,4 +1,4 @@
-# 📝 SwiftNotes — JavaScript Objects
+# JavaScript Objects
 > **Level:** Beginner–Intermediate | **Topic:** Objects, References, Map, seal/freeze  
 > **Source:** Live Console Practice Session
 
