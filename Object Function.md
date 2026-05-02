@@ -1,4 +1,4 @@
-# 📝 JavaScript Objects
+# 📝 SwiftNotes — JavaScript Objects
 > **Level:** Beginner–Intermediate | **Topic:** Objects, References, Map, seal/freeze  
 > **Source:** Live Console Practice Session
 
@@ -153,6 +153,70 @@ adminUser;  // {isAdmin: true, Name: 'Rajesh', ...} — unchanged
 
 ---
 
+## 🔐 const Object — Reference is Locked, Contents Are Not
+
+```js
+const adminUser = {};
+adminUser.Name = "Vikas";   // ✅ adding/updating properties is allowed
+adminUser;                  // {Name: 'Vikas'}
+
+adminUser = {};             // ❌ TypeError: Assignment to constant variable
+```
+
+> `const` locks the **reference** (the box), NOT the contents (what's inside the box).
+> You can freely add/update/delete properties — but you cannot point `adminUser` to a new object.
+
+---
+
+## 🧬 Nested Object — Reference in Action
+
+```js
+let userInfor = {
+  name: '',
+  email: '',
+  adminInfo: {
+    isAdmin: false,
+    access: ["IP", "sysAdmin"]
+  }
+}
+
+let adminDetails = userInfor;          // same reference
+
+adminDetails.name = 'Vikas';
+adminDetails.email = 'v@gmail.com';
+adminDetails.adminInfo.isAdmin = true;
+
+userInfor;
+// {name: 'Vikas', email: 'v@gmail.com', adminInfo: {isAdmin: true, access: [...]}}
+// userInfor is ALSO updated — same object in memory!
+```
+
+> `adminDetails = userInfor` does NOT create a copy. Both variables point to the **exact same object** — changing one changes the other, including nested properties.
+
+---
+
+## 🏗️ Object.create()
+
+Creates a new empty object. The argument passed becomes its **prototype** — NOT its own properties.
+
+```js
+let crObj = Object.create({name: 'Vikas'});
+crObj;  // {}  ← looks empty!
+```
+
+> ⚠️ `{name: 'Vikas'}` is NOT copied into `crObj` as own properties.
+> It is set as `crObj`'s **prototype** — accessible via `crObj.__proto__`, not directly on `crObj`.
+
+```js
+crObj.name;           // 'Vikas'  ✅ — inherited from prototype
+crObj.hasOwnProperty('name');  // false — not an own property!
+```
+
+> Use `Object.create()` when you want **prototype-based inheritance**, not simple property copying.
+> To create an object WITH own properties, use object literals `{}` or `Object.assign()`.
+
+---
+
 ## ❌ Common Errors Explained
 
 ### 1. `SyntaxError: missing ) after argument list`
@@ -205,6 +269,30 @@ adminUesr.Name = 'Vikas'    // ❌ same typo
 ```
 **Fix:** Check variable name spelling — `adminUser`.
 
+### 8. `TypeError: adminUser.Name is not a function`
+```js
+adminUser.Name("Vikas")   // ❌ calling Name as if it were a function
+```
+**Cause:** `adminUser.Name` is a property, not a method. Using `()` tries to call it as a function.  
+**Fix:** Use assignment syntax:
+```js
+adminUser.Name = "Vikas";  // ✅
+```
+
+### 9. `ReferenceError: adminu / admi is not defined`
+```js
+adminu   // ❌
+admi     // ❌
+```
+**Cause:** Incomplete variable name typed — JS looks for `adminu` as a declared variable and can't find it.  
+**Fix:** Type the full correct variable name: `adminUser`.
+
+### 10. `TypeError: Object.craete is not a function`
+```js
+let crObj = Object.craete({name: 'Vikas'})   // ❌ typo: 'craete'
+```
+**Fix:** `Object.create(...)` — correct spelling.
+
 ---
 
 ## 📊 Quick Reference Table
@@ -226,6 +314,7 @@ adminUesr.Name = 'Vikas'    // ❌ same typo
 | `Object.seal(obj)` | Block add/delete; allow update |
 | `Object.freeze(obj)` | Block add/delete/update (shallow) |
 | `delete obj.key` | Returns `true` (deleted) or `false` (blocked) |
+| `Object.create(proto)` | New empty object with `proto` as its prototype |
 
 ---
 
@@ -247,3 +336,6 @@ adminUesr.Name = 'Vikas'    // ❌ same typo
 > - `Object.seal()` allows updates; `Object.freeze()` blocks everything.
 > - Both `seal` and `freeze` are **shallow** — they don't protect nested objects.
 > - Use bracket notation `obj["key"]` for property names containing spaces.
+> - `const obj = {}` — you can mutate contents, but cannot reassign `obj` to a new object.
+> - `Object.create(x)` — `x` becomes the **prototype**, NOT own properties. `crObj` will appear as `{}`.
+> - `obj.prop()` with `()` tries to call `prop` as a function — use `obj.prop = value` for assignment.
