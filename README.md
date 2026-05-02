@@ -71,7 +71,8 @@ Each `.md` file is a self-contained topic note with:
 - 📊 Quick reference tables
 - 💡 Golden rules and tips
 
-Browse by topic or read them in order from variables → operators → strings → objects → collections → dates → equality.
+Browse by topic or read them in order from variables → dates → Map & Set → operators → equality → strings → objects → if - else  → Loops  → Array  → Function (Arrow Function) 
+ → SetTimeOut vs SetInterval  → Promise  → Async Await  → Event & Event Handlers  → addEventListener  → Custom Event → Getter - Setter.
 
 ---
 
