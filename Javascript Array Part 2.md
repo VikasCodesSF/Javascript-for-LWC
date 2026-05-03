@@ -1,7 +1,4 @@
 # 📦 JavaScript Arrays – Part 2
-
-> **SwiftNotes** | Definitions, syntax, examples + **LWC Real-World Use Cases**
-
 ---
 
 ## Methods Covered in This File

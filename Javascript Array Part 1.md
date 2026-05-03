@@ -1,7 +1,4 @@
 # 📦 JavaScript Arrays – Part 1
-
-> **SwiftNotes** | Beginner-friendly reference with definitions, syntax, and examples.
-
 ---
 
 ## 📌 What is an Array?
